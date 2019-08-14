@@ -1,0 +1,50 @@
+[
+  {
+    "DB_Source": {
+      "Server_Name": "192.168.67.13",
+      "DBName": "att2000Source",
+      "User": "sa",
+      "Pass": "123456a@#"
+    },
+    "Lis_DB_Target": [
+      {
+        "Server_Name": "192.168.35.21",
+        "DBName": "att2000t",
+        "User": "sa",
+        "Pass": "123"
+      },
+      {
+        "Server_Name": "192.168.35.21",
+        "DBName": "att2000t_1",
+        "User": "sa",
+        "Pass": "123"
+      }
+    ],
+    "DayOfWeed_Running": "Tuesday",
+    "Time_Running": "13:00"
+  },
+  {
+    "DB_Source": {
+      "Server_Name": "192.168.67.13",
+      "DBName": "att2000Source",
+      "User": "sa",
+      "Pass": "123456a@#"
+    },
+    "Lis_DB_Target": [
+      {
+        "Server_Name": "192.168.35.21",
+        "DBName": "att2000t",
+        "User": "sa",
+        "Pass": "123"
+      },
+      {
+        "Server_Name": "192.168.35.21",
+        "DBName": "att2000t_1",
+        "User": "sa",
+        "Pass": "123"
+      }
+    ],
+    "DayOfWeed_Running": "Tuesday",
+    "Time_Running": "13:00"
+  }
+]

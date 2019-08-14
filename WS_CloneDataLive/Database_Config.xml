@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--<ArrayOfInfo_Job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  -->
+<!--<Info_Job>
+    <DB_Source>
+      <Server_Name>192.168.67.13</Server_Name>
+      <DBName>AMS18032019</DBName>
+      <User>sa</User>
+      <Pass>123456a@#</Pass>
+    </DB_Source>
+    <Lis_DB_Target>
+      <Info_Instances>
+        <Server_Name>192.168.35.21</Server_Name>
+        <DBName>TEST_AMS</DBName>
+        <User>sa</User>
+        <Pass>123456a@</Pass>
+      </Info_Instances>
+    </Lis_DB_Target>
+    <DayOfWeed_Running>Monday</DayOfWeed_Running>
+    <Time_Running>06:00</Time_Running>
+  </Info_Job>
+  <Info_Job>
+    <DB_Source>
+      <Server_Name>192.168.67.13</Server_Name>
+      <DBName>TMS</DBName>
+      <User>sa</User>
+      <Pass>123456a@#</Pass>
+    </DB_Source>
+    <Lis_DB_Target>
+      <Info_Instances>
+        <Server_Name>192.168.35.21</Server_Name>
+        <DBName>TEST_TMS</DBName>
+        <User>sa</User>
+        <Pass>123456a@</Pass>
+      </Info_Instances>
+    </Lis_DB_Target>
+    <DayOfWeed_Running>Monday</DayOfWeed_Running>
+    <Time_Running>06:10</Time_Running>
+  </Info_Job>-->
+<!--
+    <Info_Job>
+    <DB_Source>
+      <Server_Name>192.168.67.13</Server_Name>
+      <DBName>AMS18032019</DBName>
+      <User>sa</User>
+      <Pass>123456a@#</Pass>
+    </DB_Source>
+    <Lis_DB_Target>
+      <Info_Instances>
+        <Server_Name>192.168.35.21</Server_Name>
+        <DBName>test</DBName>
+        <User>sa</User>
+        <Pass>123456a@</Pass>
+      </Info_Instances>
+    </Lis_DB_Target>
+    <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
+    <Time_Running>06:20</Time_Running>
+  </Info_Job>
+    <Info_Job>
+    <DB_Source>
+      <Server_Name>192.168.67.13</Server_Name>
+      <DBName>TMS</DBName>
+      <User>sa</User>
+      <Pass>123456a@#</Pass>
+    </DB_Source>
+    <Lis_DB_Target>
+      <Info_Instances>
+        <Server_Name>192.168.35.21</Server_Name>
+        <DBName>test2</DBName>
+        <User>sa</User>
+        <Pass>123456a@</Pass>
+      </Info_Instances>
+    </Lis_DB_Target>
+    <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
+    <Time_Running>06:30</Time_Running>
+  </Info_Job>
+</ArrayOfInfo_Job>-->
+
+
+<ArrayOfInfo_Instances xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Info_Instances>
+    <backupFilename>TMS.bak</backupFilename>
+    <Server_Name>192.168.35.21</Server_Name>
+    <DBName>
+      <string>test2</string>
+    </DBName>
+    <User>sa</User>
+    <Pass>123456a@</Pass>
+    <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
+    <Time_Running>06:30</Time_Running>
+  </Info_Instances>
+  <Info_Instances>
+    <backupFilename>AMS18032019.bak</backupFilename>
+    <Server_Name>192.168.35.21</Server_Name>
+    <DBName>
+      <string>test</string>
+    </DBName>
+    <User>sa</User>
+    <Pass>123456a@</Pass>
+    <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
+    <Time_Running>06:30</Time_Running>
+  </Info_Instances>
+</ArrayOfInfo_Instances>
