@@ -199,7 +199,6 @@
     <None Include="Service_Start.bat" />
     <None Include="Service_Stop.bat" />
     <None Include="Service_Uninstall.bat" />
-    <None Include="WS_CloneDataLive_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Database_Config.xml">
