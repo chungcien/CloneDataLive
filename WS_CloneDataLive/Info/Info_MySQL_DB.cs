@@ -12,7 +12,8 @@ namespace WS_CloneDataLive
     public class Info_MySQL_DB
     {
         public string ServerSource { set; get; }
-        public string DBName { set; get; }
+        public string DBSource { set; get; }
+        public string DBTarget { set; get; }
         public string DayOfWeed_Running { set; get; }
         public string Time_Running { set; get; }
         public List<string> Email { set; get; }
@@ -22,17 +23,20 @@ namespace WS_CloneDataLive
         {
             try
             {
-                FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + DBName + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBName + ".zip");
+                File_Read_Write.Create_Exits_Folder(AppDomain.CurrentDomain.BaseDirectory + @"Download\");
 
-                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + DBName + ".sql"))
+                FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + DBSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBSource + ".zip");
+
+
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + DBSource + ".sql"))
                 {
-                    File.Delete(AppDomain.CurrentDomain.BaseDirectory + DBName + ".sql");
+                    File.Delete(AppDomain.CurrentDomain.BaseDirectory + DBSource + ".sql");
                 }
 
-                ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Download\" + DBName + ".zip", AppDomain.CurrentDomain.BaseDirectory);
+                ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Download\" + DBSource + ".zip", AppDomain.CurrentDomain.BaseDirectory);
 
-                string constring = "server=" + instansce.Server_Name + ";port=" + instansce.Port + ";user=" + instansce.User + ";pwd=" + instansce.Pass + ";database=" + DBName + ";";
-                string file = AppDomain.CurrentDomain.BaseDirectory + DBName + ".sql";
+                string constring = "server=" + instansce.Server_Name + ";port=" + instansce.Port + ";user=" + instansce.User + ";pwd=" + instansce.Pass + ";database=" + DBTarget + ";";
+                string file = AppDomain.CurrentDomain.BaseDirectory + DBSource + ".sql";
                 using (MySqlConnection conn = new MySqlConnection(constring))
                 {
                     using (MySqlCommand cmd = new MySqlCommand())

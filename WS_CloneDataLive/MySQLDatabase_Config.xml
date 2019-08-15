@@ -2,16 +2,17 @@
 <ArrayOfInfo_MySQLJob xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Info_MySQLJob>
     <Instances>
-      <DisplayName>dashboard</DisplayName>
-      <Server_Name>192.168.67.23</Server_Name>
+      <DisplayName>dashboard_UAT</DisplayName>
+      <Server_Name>45.122.253.18</Server_Name>
       <Port>3306</Port>
-      <User>dashboard</User>
-      <Pass>dashboard@cmcglobal12345</Pass>
+      <User>testing_dev</User>
+      <Pass>testing@123</Pass>
     </Instances>
     <ListDB>
       <Info_MySQL_DB>
-        <ServerSource>192.168.67.13</ServerSource>
-        <DBName>dashboard</DBName>
+        <ServerSource>dashboard</ServerSource>
+        <DBSource>dashboard</DBSource>
+        <DBTarget>testing_online</DBTarget>
         <Time_Running>18:19</Time_Running>
         <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
         <Email>
@@ -30,8 +31,9 @@
     </Instances>
     <ListDB>
       <Info_MySQL_DB>
-        <ServerSource>192.168.67.13</ServerSource>
-        <DBName>rts_live</DBName>
+        <ServerSource>rts</ServerSource>
+        <DBSource>rts_live</DBSource>
+        <DBTarget>testing_online</DBTarget>
         <Time_Running>15:15</Time_Running>
         <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
         <Email>

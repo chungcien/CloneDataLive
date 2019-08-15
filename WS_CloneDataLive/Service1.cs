@@ -101,9 +101,9 @@ namespace WS_CloneDataLive
             info_DB = new List<Info_DB>();
             info_JobMySQL = new List<Info_MySQLJob>();
 
-            info_DB = XML_read_write.ConvertXmlStringtoObject<List<Info_DB>>(System.IO.File.ReadAllText("Database_Config.xml"));
+            info_DB = XML_read_write.ConvertXmlStringtoObject<List<Info_DB>>(System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory+"Database_Config.xml"));
 
-            info_JobMySQL = XML_read_write.ConvertXmlStringtoObject<List<Info_MySQLJob>>(System.IO.File.ReadAllText("MySQLDatabase_Config.xml"));
+            info_JobMySQL = XML_read_write.ConvertXmlStringtoObject<List<Info_MySQLJob>>(System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory+"MySQLDatabase_Config.xml"));
 
 
             fTPServer.URL = ConfigurationManager.AppSettings["FTP_SERVER_URI"].ToString();
