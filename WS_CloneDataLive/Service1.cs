@@ -47,6 +47,7 @@ namespace WS_CloneDataLive
         private void timer_Tick(object sender, EventArgs e)
         {
             string date_time = DateTime.Now.ToString("HH:mm");
+
             for (int i = 0; i < info_DB.Count; i++)
             {
                 if (date_time == info_DB[i].Time_Running)
@@ -57,18 +58,42 @@ namespace WS_CloneDataLive
                     {
                         if (DateTime.Now.DayOfWeek.ToString().ToLower() == day_running[j].ToLower())
                         {
-                            new Thread(() => SQLServer_Running(info_DB[i])).Start();
+                            Info_DB infoDB = info_DB[i];
+                            new Thread(() => SQLServer_Running(infoDB , _Server)).Start();
                         }
                     }
                 }
             }
 
+
+            for (int i = 0; i < info_JobMySQL.Count; i++)
+            {
+                for(int k = 0; k < info_JobMySQL[i].ListDB.Count; k++)
+                {
+                    if (date_time == info_JobMySQL[i].ListDB[k].Time_Running)
+                    {
+                        List<string> day_running = info_JobMySQL[i].ListDB[k].DayOfWeed_Running.Split(',').ToList();
+
+                        for (int j = 0; j < day_running.Count; j++)
+                        {
+                            if (DateTime.Now.DayOfWeek.ToString().ToLower() == day_running[j].ToLower())
+                            {
+                                Info_MySQL_DB infoDB = info_JobMySQL[i].ListDB[k];
+                                Info_MySQL_Instansce instansce = info_JobMySQL[i].Instances;
+
+                                new Thread(() => MySQL_Running(instansce, infoDB)).Start();
+                            }
+                        }
+                    }
+                }
+                
+            }
         }
 
 
         protected override void OnStart(string[] args)
         {
-            //Restore();
+            
             //Backup();
             File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), "-----------------------------------------------------", true);
             File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.ToString() + ": Service Starting...", true);
@@ -93,102 +118,34 @@ namespace WS_CloneDataLive
 
             //SQLServer_Running(info_DB[0]);
 
-            for(int i = 0; i< info_JobMySQL.Count; i++)
-            {
-                Backup(info_JobMySQL[i].DBSource);
-            }
+            MySQL_Running(info_JobMySQL[0].Instances, info_JobMySQL[0].ListDB[0]);
+
+            //for(int i = 0; i< info_JobMySQL.Count; i++)
+            //{
+            //    Restore(info_JobMySQL[i].DBSource);
+            //}
 
         }
 
 
-        void SQLServer_Running(Info_DB Job)
+        void SQLServer_Running(Info_DB Job, Info_Server info_Server)
         {
             Thread.CurrentThread.IsBackground = true;
 
 
-            FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + Job.ServerSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", Job.DBSource + ".zip");
-
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Job.DBSource + ".bak"))
-            {
-                File.Delete(AppDomain.CurrentDomain.BaseDirectory + Job.DBSource + ".bak");
-            }
-
-            ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Download\" + Job.DBSource + ".zip", AppDomain.CurrentDomain.BaseDirectory);
-
-
-            Database_Operation.RestoreDatabase(_Server.ServerName, Job.DBTarget, AppDomain.CurrentDomain.BaseDirectory + Job.DBSource + ".bak");
-
-
-            //var ops = new SmoOperations();
-            // var temp = ops.TableNames(Job.DB_Source.DBName);
-
-            // ops.GetTransferScript(AppDomain.CurrentDomain.BaseDirectory + "test.sql", Job.DB_Source);
-
-            //ops.ExcuteSQLScript(AppDomain.CurrentDomain.BaseDirectory + "test.sql", Job.Lis_DB_Target, true);
+            Job.Excute_Restore_DB(info_Server, fTPServer);
 
         }
 
-        void MySQL_Running(Info_MySQLJob Job)
+        void MySQL_Running(Info_MySQL_Instansce instansce, Info_MySQL_DB DB)
         {
             Thread.CurrentThread.IsBackground = true;
 
-
-            FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + Job.DBSource.DBName + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", Job.DBSource.DBName + ".zip");
-
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + Job.DBSource.DBName + ".sql"))
-            {
-                File.Delete(AppDomain.CurrentDomain.BaseDirectory + Job.DBSource.DBName + ".sql");
-            }
-
-            ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Download\" + Job.DBSource.DBName + ".zip", AppDomain.CurrentDomain.BaseDirectory);
-
+            DB.Excute_Restore_DB(instansce, fTPServer);
         }
 
-        private void Backup(Info_MySQLDB DB)
-        {
-            string constring = "server=" + DB.Server_Name + ";port=" + DB.Port + ";user=" + DB.User + ";pwd=" + DB.Pass + ";database=" + DB.DBName + ";";
-
-            File_Read_Write.Create_Exits_Folder(AppDomain.CurrentDomain.BaseDirectory + @"MySQLBackup\");
-
-            string file = AppDomain.CurrentDomain.BaseDirectory + @"MySQLBackup\" + DB.DBName + ".sql";
-
-            using (MySqlConnection conn = new MySqlConnection(constring))
-            {
-                using (MySqlCommand cmd = new MySqlCommand())
-                {
-                    using (MySqlBackup mb = new MySqlBackup(cmd))
-                    {
-                        cmd.Connection = conn;
-                        conn.Open();
-                        mb.ExportToFile(file);
-                        conn.Close();
-                    }
-                }
-            }
-        }
-
-        private void Restore(Info_MySQLDB DB)
-        {
-            string constring = "server=" + DB.Server_Name + ";port=" + DB.Port + ";user=" + DB.User + ";pwd=" + DB.Pass + ";database=" + DB.DBName + ";";
-            string file = AppDomain.CurrentDomain.BaseDirectory + DB.DBName + ".sql";
-            using (MySqlConnection conn = new MySqlConnection(constring))
-            {
-                using (MySqlCommand cmd = new MySqlCommand())
-                {
-                    using (MySqlBackup mb = new MySqlBackup(cmd))
-                    {
-                        cmd.Connection = conn;
-                        conn.Open();
-                        cmd.CommandText = "SET GLOBAL max_allowed_packet=1024*1024*1024;";
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-                        conn.Open();
-                        mb.ImportFromFile(file);
-                        conn.Close();
-                    }
-                }
-            }
-        }
+        
+        
 
         protected override void OnStop()
         {

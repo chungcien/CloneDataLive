@@ -37,6 +37,7 @@ namespace WS_BackupMySQL
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            string date_time = DateTime.Now.ToString("HH:mm");
 
             try
             {
@@ -46,12 +47,10 @@ namespace WS_BackupMySQL
                 {
                     for (int j = 0; j < info_JobMySQL[i].ListDB.Count; j++)
                     {
-                        string date_time = DateTime.Now.ToString("HH:mm");
-
                         if (date_time == info_JobMySQL[i].ListDB[j].Time_Running)
                         {
                             Info_MySQL_Instance instance = info_JobMySQL[i].Instances;
-                            Info_DB inf = info_JobMySQL[i].ListDB[j];
+                            Info_MySQL_DB inf = info_JobMySQL[i].ListDB[j];
                             new Thread(() => DB_Backup_Running(inf, instance)).Start();
                         }
                     }
@@ -75,7 +74,7 @@ namespace WS_BackupMySQL
         }
 
 
-        void DB_Backup_Running(Info_DB new_DB, Info_MySQL_Instance instansce)
+        void DB_Backup_Running(Info_MySQL_DB new_DB, Info_MySQL_Instance instansce)
         {
             Compression_File Comp = new Compression_File();
 

@@ -14,43 +14,10 @@ namespace WS_CloneDataLive
         static Server srv;
         static ServerConnection conn;
 
-        public static void BackupDatabase(string serverName, string databaseName, string filePath)
-        {
-            conn = new ServerConnection();
-            conn.ServerInstance = serverName;
-            srv = new Server(conn);
-
-            try
-            {
-                Backup bkp = new Backup();
-
-                bkp.Action = BackupActionType.Database;
-                bkp.Database = databaseName;
-
-                bkp.Devices.AddDevice(filePath, DeviceType.File);
-                bkp.Incremental = false;
-
-                bkp.SqlBackup(srv);
-
-                conn.Disconnect();
-                conn = null;
-                srv = null;
-            }
-
-            catch (SmoException ex)
-            {
-                throw new SmoException(ex.Message, ex.InnerException);
-            }
-            catch (IOException ex)
-            {
-                throw new IOException(ex.Message, ex.InnerException);
-            }
-        }
-
-        public static void RestoreDatabase(string serverName, string databaseName, string filePath)
+        public static void RestoreDatabase(Info_Server info_Server, string databaseName, string filePath)
         {
 
-            conn = new ServerConnection(serverName,"sa","123456a@");
+            conn = new ServerConnection(info_Server.ServerName, info_Server.User, info_Server.Pass);
             //conn.ServerInstance = serverName;
             srv = new Server(conn);
 

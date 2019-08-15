@@ -70,7 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Info\Info_DB.cs" />
+    <Compile Include="Info\Info_MySQL_DB.cs" />
     <Compile Include="Info\Info_FTPServer.cs" />
     <Compile Include="Info\Info_MySQL_Instance.cs" />
     <Compile Include="Info\Info_MySQLJob.cs" />

@@ -9,6 +9,6 @@ namespace WS_CloneDataLive
     public class Info_MySQLJob
     {
         public Info_MySQL_Instance Instances { set; get; }
-        public List<Info_DB> ListDB { set; get; }
+        public List<Info_MySQL_DB> ListDB { set; get; }
     }
 }

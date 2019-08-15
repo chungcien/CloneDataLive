@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WS_CloneDataLive
 {
-    class Info_FTPServer
+    public class Info_FTPServer
     {
         public string URL { set; get; }
         public string User { set; get; }
