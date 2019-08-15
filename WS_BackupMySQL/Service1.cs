@@ -40,7 +40,7 @@ namespace WS_BackupMySQL
 
             try
             {
-                info_JobMySQL = XML_read_write.ConvertXmlStringtoObject<List<Info_MySQLJob>>(System.IO.File.ReadAllText("MySQLDatabase_Config.xml"));
+                info_JobMySQL = XML_read_write.ConvertXmlStringtoObject<List<Info_MySQLJob>>(System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "MySQLDatabase_Config.xml"));
 
                 for (int i = 0; i < info_JobMySQL.Count; i++)
                 {
@@ -143,7 +143,7 @@ namespace WS_BackupMySQL
                 }
 
                 //gửi mail
-                SendEmail.Send_Email(new_DB.Email, null, "[AMS - TMS] Backup Database succufully!", "Backup Database " + instansce.Server_Name + @" - " + new_DB.DBName + " succufully!", false);
+                SendEmail.Send_Email(new_DB.Email, null, "[Dashboard - RTS] Backup Database succufully!", "Backup Database " + instansce.Server_Name + @" - " + new_DB.DBName + " succufully!", false);
 
 
                 //quá trình hoàn tất 
@@ -164,7 +164,7 @@ namespace WS_BackupMySQL
                 catch { }
 
                 //gửi mail
-                SendEmail.Send_Email(new_DB.Email, null, "[AMS - TMS] Backup Database error!", "Server: " + instansce.Server_Name + "\nDatabase name: " + new_DB.DBName + "\n" + Mess, false);
+                SendEmail.Send_Email(new_DB.Email, null, "[Dashboard - RTS] Backup Database error!", "Server: " + instansce.Server_Name + "\nDatabase name: " + new_DB.DBName + "\n" + Mess, false);
 
 
                 File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": ----------------------------------------- ", true);

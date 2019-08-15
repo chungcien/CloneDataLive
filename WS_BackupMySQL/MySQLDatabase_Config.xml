@@ -11,9 +11,10 @@
     <ListDB>
       <Info_DB>
         <DBName>dashboard</DBName>
-        <Time_Running>18:19</Time_Running>
+        <Time_Running>21:00</Time_Running>
         <Email>
           <string>intern.ltkien@cmc.com.vn</string>
+          <string>pdtanh@cmc.com.vn</string>
         </Email>
       </Info_DB>
     </ListDB>
@@ -29,9 +30,10 @@
     <ListDB>
       <Info_DB>
         <DBName>rts_live</DBName>
-        <Time_Running>15:15</Time_Running>
+        <Time_Running>21:05</Time_Running>
         <Email>
           <string>intern.ltkien@cmc.com.vn</string>
+          <string>pdtanh@cmc.com.vn</string>
         </Email>
       </Info_DB>
     </ListDB>
