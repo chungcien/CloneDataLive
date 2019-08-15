@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace WS_CloneDataLive
 {
-    public class Info_MySQLDB
+    class Info_FTPServer
     {
-        public string DisplayName { set; get; }
-        public string Server_Name { set; get; }
-        public int Port { set; get; }
+        public string URL { set; get; }
         public string User { set; get; }
         public string Pass { set; get; }
-        public string DBName { set; get; }
     }
 }
