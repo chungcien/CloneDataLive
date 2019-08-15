@@ -198,7 +198,8 @@
     <Compile Include="Classes\SmoOperations.cs" />
     <Compile Include="Info\Info_DB.cs" />
     <Compile Include="Info\Info_FTPServer.cs" />
-    <Compile Include="Info\Info_MySQLDB.cs" />
+    <Compile Include="Info\Info_MySQL_DB.cs" />
+    <Compile Include="Info\Info_MySQL_Instansce.cs" />
     <Compile Include="Info\Info_MySQLJob.cs" />
     <Compile Include="Info\Info_Server.cs" />
     <Compile Include="Service1.cs">

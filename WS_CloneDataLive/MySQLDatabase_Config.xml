@@ -1,47 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ArrayOfInfo_MySQLJob xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-
   <Info_MySQLJob>
-    <DBSource>
+    <Instances>
       <DisplayName>dashboard</DisplayName>
       <Server_Name>192.168.67.23</Server_Name>
       <Port>3306</Port>
-      <DBName>dashboard</DBName>
       <User>dashboard</User>
       <Pass>dashboard@cmcglobal12345</Pass>
-    </DBSource>
-    <Lis_DB_Target>
-      <Info_MySQLDB>
-        <Server_Name>45.122.253.18</Server_Name>
-        <Port>3306</Port>
-        <DBName>dashboard_uat</DBName>
-        <User>dashboard_dev</User>
-        <Pass>dashboard@123</Pass>
-      </Info_MySQLDB>
-    </Lis_DB_Target>
-    <DayOfWeed_Running>Monday</DayOfWeed_Running>
-    <Time_Running>06:00</Time_Running>
+    </Instances>
+    <ListDB>
+      <Info_MySQL_DB>
+        <ServerSource>192.168.67.13</ServerSource>
+        <DBName>dashboard</DBName>
+        <Time_Running>18:19</Time_Running>
+        <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
+        <Email>
+          <string>intern.ltkien@cmc.com.vn</string>
+        </Email>
+      </Info_MySQL_DB>
+    </ListDB>
   </Info_MySQLJob>
   <Info_MySQLJob>
-    <DBSource>
+    <Instances>
       <DisplayName>rts</DisplayName>
       <Server_Name>45.122.253.18</Server_Name>
       <Port>3306</Port>
-      <DBName>rts_live</DBName>
       <User>rts_production</User>
       <Pass>rts@cmcglobal12345</Pass>
-    </DBSource>
-    <Lis_DB_Target>
-      <Info_MySQLDB>
-        <Server_Name>45.122.253.18</Server_Name>
-        <Port>3306</Port>
-        <DBName>rts</DBName>
-        <User>rts_dev</User>
-        <Pass>rts@123</Pass>
-      </Info_MySQLDB>
-    </Lis_DB_Target>
-    <DayOfWeed_Running>Monday</DayOfWeed_Running>
-    <Time_Running>06:10</Time_Running>
+    </Instances>
+    <ListDB>
+      <Info_MySQL_DB>
+        <ServerSource>192.168.67.13</ServerSource>
+        <DBName>rts_live</DBName>
+        <Time_Running>15:15</Time_Running>
+        <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
+        <Email>
+          <string>intern.ltkien@cmc.com.vn</string>
+        </Email>
+      </Info_MySQL_DB>
+    </ListDB>
   </Info_MySQLJob>
 
   <!--<Info_Job>

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using WS_CloneDataLive;
 
-public class Info_DB
+public class Info_MySQL_DB
 {
     public string DBName { set; get; }
     public string Time_Running { set; get; }
