@@ -3,17 +3,17 @@
   <Info_MySQLJob>
     <Instances>
       <DisplayName>dashboard_UAT</DisplayName>
-      <Server_Name>45.122.253.18</Server_Name>
+      <Server_Name>localhost</Server_Name>
       <Port>3306</Port>
-      <User>testing_dev</User>
-      <Pass>testing@123</Pass>
+      <User>root</User>
+      <Pass>chungcien</Pass>
     </Instances>
     <ListDB>
       <Info_MySQL_DB>
         <ServerSource>dashboard</ServerSource>
         <DBSource>dashboard</DBSource>
         <DBTarget>testing_online</DBTarget>
-        <Time_Running>18:19</Time_Running>
+        <Time_Running>23:00</Time_Running>
         <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
         <Email>
           <string>intern.ltkien@cmc.com.vn</string>

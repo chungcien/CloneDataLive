@@ -25,7 +25,7 @@ namespace WS_CloneDataLive
             {
                 File_Read_Write.Create_Exits_Folder(AppDomain.CurrentDomain.BaseDirectory + @"Download\");
 
-                FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + DBSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBSource + ".zip");
+                //FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + DBSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBSource + ".zip");
 
 
                 if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + DBSource + ".sql"))
@@ -35,7 +35,7 @@ namespace WS_CloneDataLive
 
                 ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Download\" + DBSource + ".zip", AppDomain.CurrentDomain.BaseDirectory);
 
-                string constring = "server=" + instansce.Server_Name + ";port=" + instansce.Port + ";user=" + instansce.User + ";pwd=" + instansce.Pass + ";database=" + DBTarget + ";";
+                string constring = "server=" + instansce.Server_Name + ";port=" + instansce.Port + ";user=" + instansce.User + ";pwd=" + instansce.Pass + ";";
                 string file = AppDomain.CurrentDomain.BaseDirectory + DBSource + ".sql";
                 using (MySqlConnection conn = new MySqlConnection(constring))
                 {
@@ -45,9 +45,14 @@ namespace WS_CloneDataLive
                         {
                             cmd.Connection = conn;
                             conn.Open();
-                            cmd.CommandText = "SET GLOBAL max_allowed_packet=1024*1024*1024;";
+                            cmd.CommandText = "SET GLOBAL max_allowed_packet=1024*1024*1024; DROP DATABASE IF EXISTS " + DBTarget + "; Create database " + DBTarget;
                             cmd.ExecuteNonQuery();
                             conn.Close();
+
+                            constring = "server=" + instansce.Server_Name + ";port=" + instansce.Port + ";user=" + instansce.User + ";pwd=" + instansce.Pass + ";database=" + DBTarget + ";";
+
+                            conn.ConnectionString = (constring);
+
                             conn.Open();
                             mb.ImportFromFile(file);
                             conn.Close();

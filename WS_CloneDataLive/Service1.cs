@@ -118,13 +118,14 @@ namespace WS_CloneDataLive
 
             //SQLServer_Running(info_DB[0]);
 
-            MySQL_Running(info_JobMySQL[0].Instances, info_JobMySQL[0].ListDB[0]);
+            //MySQL_Running(info_JobMySQL[0].Instances, info_JobMySQL[0].ListDB[0]);
 
             //for(int i = 0; i< info_JobMySQL.Count; i++)
             //{
             //    Restore(info_JobMySQL[i].DBSource);
             //}
 
+            timer.Start();
         }
 
 
