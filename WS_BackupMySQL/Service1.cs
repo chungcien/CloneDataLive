@@ -32,15 +32,7 @@ namespace WS_BackupMySQL
 
         System.Timers.Timer timer = null;
 
-        List<string> List_ScanAt = new List<string>();
-
-        Info_Server _Server = new Info_Server();
-
-        Info_FTPServer fTPServer = new Info_FTPServer();
-
-        List<Info_DB> info_DB;
-
-        List<Info_MySQLJob> info_JobMySQL;
+        List<Info_MySQLJob> info_JobMySQL = new List<Info_MySQLJob>();
 
 
         private void timer_Tick(object sender, EventArgs e)
@@ -52,13 +44,13 @@ namespace WS_BackupMySQL
 
                 for (int i = 0; i < info_JobMySQL.Count; i++)
                 {
-                    Info_MySQL_Instance instance = info_JobMySQL[i].Instances;
-                    for (int j = 0; j< info_JobMySQL[i].ListDB.Count; j++)
+                    for (int j = 0; j < info_JobMySQL[i].ListDB.Count; j++)
                     {
                         string date_time = DateTime.Now.ToString("HH:mm");
 
                         if (date_time == info_JobMySQL[i].ListDB[j].Time_Running)
                         {
+                            Info_MySQL_Instance instance = info_JobMySQL[i].Instances;
                             Info_DB inf = info_JobMySQL[i].ListDB[j];
                             new Thread(() => DB_Backup_Running(inf, instance)).Start();
                         }
@@ -76,24 +68,14 @@ namespace WS_BackupMySQL
 
         protected override void OnStart(string[] args)
         {
-            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), "-----------------------------------------------------", true);
-            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.ToString() + ": Service Starting...", true);
+            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", "-----------------------------------------------------", true);
+            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now.ToString() + ": Service Starting...", true);
 
-            info_DB = new List<Info_DB>();
-            info_JobMySQL = new List<Info_MySQLJob>();
-
-
-
-            //fTPServer.URL = ConfigurationManager.AppSettings["FTP_SERVER_URI"].ToString();
-            //fTPServer.User = ConfigurationManager.AppSettings["FTP_USER"].ToString();
-            //fTPServer.Pass = ConfigurationManager.AppSettings["FTP_PASSWORD"].ToString();
-            //Info_DB inf = info_JobMySQL[1].ListDB[0];
-            //DB_Backup_Running(inf, info_JobMySQL[1].Instances);
             timer.Start();
         }
 
 
-        static void DB_Backup_Running(Info_DB new_DB, Info_MySQL_Instance instansce)
+        void DB_Backup_Running(Info_DB new_DB, Info_MySQL_Instance instansce)
         {
             Compression_File Comp = new Compression_File();
 
@@ -111,11 +93,7 @@ namespace WS_BackupMySQL
                 }
                 else
                 {
-                    try
-                    {
-                        File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": Backup " + instansce.Server_Name + @" - " + new_DB.DBName + " Successfully!", true);
-                    }
-                    catch { }
+                    File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": Backup " + instansce.Server_Name + @" - " + new_DB.DBName + " Successfully!", true);
                 }
 
 
@@ -127,11 +105,7 @@ namespace WS_BackupMySQL
                 }
                 else
                 {
-                    try
-                    {
-                        File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": Compression " + instansce.Server_Name + @" - " + new_DB.DBName + ".zip Successfully!", true);
-                    }
-                    catch { }
+                    File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": Compression " + instansce.Server_Name + @" - " + new_DB.DBName + ".zip Successfully!", true);
                 }
 
                 // tạo folder trong FTP server
@@ -165,11 +139,7 @@ namespace WS_BackupMySQL
                 }
                 else
                 {
-                    try
-                    {
-                        File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": Upload " + instansce.Server_Name + @" - " + new_DB.DBName + ".zip to " + ConfigurationManager.AppSettings["FTP_SERVER_URI"].ToString() + path_save_inFTP + " Successfully!", true);
-                    }
-                    catch { }
+                    File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": Upload " + instansce.Server_Name + @" - " + new_DB.DBName + ".zip to " + ConfigurationManager.AppSettings["FTP_SERVER_URI"].ToString() + path_save_inFTP + " Successfully!", true);
                 }
 
                 //gửi mail
@@ -194,7 +164,7 @@ namespace WS_BackupMySQL
                 catch { }
 
                 //gửi mail
-                SendEmail.Send_Email(new_DB.Email, null, "[AMS - TMS] Backup Database error!", "Server: " + instansce.Server_Name + @"\nDatabase name: " + new_DB.DBName + "\n" + Mess, false);
+                SendEmail.Send_Email(new_DB.Email, null, "[AMS - TMS] Backup Database error!", "Server: " + instansce.Server_Name + "\nDatabase name: " + new_DB.DBName + "\n" + Mess, false);
 
 
                 File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": ----------------------------------------- ", true);
@@ -205,10 +175,16 @@ namespace WS_BackupMySQL
         }
 
 
-        
+
 
         protected override void OnStop()
         {
+            timer.Stop();
+
+            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now.ToString() + ": Service stopped!", true);
+
+            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now + ": ----------------------------------------- ", true);
+
         }
     }
 }

@@ -67,13 +67,13 @@ namespace WS_CloneDataLive
 
                     smtpServer.Send(mail);
 
-                    File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.ToString() + ": Sending email \"" + title + "\" TO " + String.Join(", ", ToEmail.ToArray()) + " and " + ((CC == null) ? "no CC" : "CC to " + String.Join(", ", CC.ToArray())) + " Succufully!", true);
+                    File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now.ToString() + ": Sending email \"" + title + "\" TO " + String.Join(", ", ToEmail.ToArray()) + " and " + ((CC == null) ? "no CC" : "CC to " + String.Join(", ", CC.ToArray())) + " Succufully!", true);
 
                     break;
                 }
                 catch (Exception er)
                 {
-                    File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.ToString() + ": Try " + (j + 1) + ": Error - Sending email \"" + title + "\" TO " + String.Join(", ", ToEmail.ToArray()) + " and " + ((CC == null) ? "no CC" : "CC to " + String.Join(", ", CC.ToArray())) + " error!" + er.Message, true);
+                    File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt", DateTime.Now.ToString() + ": Try " + (j + 1) + ": Error - Sending email \"" + title + "\" TO " + String.Join(", ", ToEmail.ToArray()) + " and " + ((CC == null) ? "no CC" : "CC to " + String.Join(", ", CC.ToArray())) + " error!" + er.Message, true);
                 }
             }
             return null;

@@ -74,7 +74,6 @@
     <Compile Include="Info\Info_FTPServer.cs" />
     <Compile Include="Info\Info_MySQL_Instance.cs" />
     <Compile Include="Info\Info_MySQLJob.cs" />
-    <Compile Include="Info\Info_Server.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
     </Compile>
