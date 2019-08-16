@@ -14,10 +14,10 @@ namespace WS_CloneDataLive
         static Server srv;
         static ServerConnection conn;
 
-        public static void RestoreDatabase(Info_Server info_Server, string databaseName, string filePath)
+        public static Exception RestoreDatabase(Info_Server info_Server, string databaseName, string filePath)
         {
 
-            conn = new ServerConnection(info_Server.ServerName, info_Server.User, info_Server.Pass);
+            conn = new ServerConnection(info_Server.Server_Name, info_Server.User, info_Server.Pass);
             //conn.ServerInstance = serverName;
             srv = new Server(conn);
 
@@ -48,12 +48,14 @@ namespace WS_CloneDataLive
             }
             catch (SmoException ex)
             {
-                throw new SmoException(ex.Message, ex.InnerException);
+                return new Exception(ex.Message, ex.InnerException);
             }
             catch (IOException ex)
             {
-                throw new IOException(ex.Message, ex.InnerException);
+                return new Exception(ex.Message, ex.InnerException);
             }
+
+            return null;
         }
 
         public static Server Getdatabases(string serverName)

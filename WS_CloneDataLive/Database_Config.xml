@@ -5,13 +5,21 @@
     <DBSource>TMS</DBSource>
     <DBTarget>test2</DBTarget>
     <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
-    <Time_Running>06:30</Time_Running>
+    <Time_Running>05:00</Time_Running>
+    <Email>
+      <string>intern.ltkien@cmc.com.vn</string>
+      <string>pdtanh@cmc.com.vn</string>
+    </Email>
   </Info_DB>
   <Info_DB>
     <ServerSource>192.168.67.13</ServerSource>
     <DBSource>AMS18032019</DBSource>
     <DBTarget>test</DBTarget>
     <DayOfWeed_Running>Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday</DayOfWeed_Running>
-    <Time_Running>06:30</Time_Running>
+    <Time_Running>05:05</Time_Running>
+    <Email>
+      <string>intern.ltkien@cmc.com.vn</string>
+      <string>pdtanh@cmc.com.vn</string>
+    </Email>
   </Info_DB>
 </ArrayOfInfo_DB>

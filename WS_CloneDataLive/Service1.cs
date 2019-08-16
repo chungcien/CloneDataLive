@@ -27,6 +27,8 @@ namespace WS_CloneDataLive
             timer.Interval = 60000;
         }
 
+        string log_path = AppDomain.CurrentDomain.BaseDirectory + @"Log\Service_Log.txt";
+
         System.Timers.Timer timer = null;
 
         List<string> List_ScanAt = new List<string>();
@@ -59,7 +61,7 @@ namespace WS_CloneDataLive
                         if (DateTime.Now.DayOfWeek.ToString().ToLower() == day_running[j].ToLower())
                         {
                             Info_DB infoDB = info_DB[i];
-                            new Thread(() => SQLServer_Running(infoDB , _Server)).Start();
+                            new Thread(() => SQLServer_Running(infoDB, _Server)).Start();
                         }
                     }
                 }
@@ -68,7 +70,7 @@ namespace WS_CloneDataLive
 
             for (int i = 0; i < info_JobMySQL.Count; i++)
             {
-                for(int k = 0; k < info_JobMySQL[i].ListDB.Count; k++)
+                for (int k = 0; k < info_JobMySQL[i].ListDB.Count; k++)
                 {
                     if (date_time == info_JobMySQL[i].ListDB[k].Time_Running)
                     {
@@ -86,33 +88,45 @@ namespace WS_CloneDataLive
                         }
                     }
                 }
-                
+
             }
         }
 
 
         protected override void OnStart(string[] args)
         {
-            
+
             //Backup();
-            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), "-----------------------------------------------------", true);
-            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.ToString() + ": Service Starting...", true);
+            File_Read_Write.Write_File(log_path, "-----------------------------------------------------", true);
+            File_Read_Write.Write_File(log_path, DateTime.Now.ToString() + ": Service Starting...", true);
 
-            info_DB = new List<Info_DB>();
-            info_JobMySQL = new List<Info_MySQLJob>();
+            try
+            {
+                info_DB = new List<Info_DB>();
+                info_JobMySQL = new List<Info_MySQLJob>();
 
-            info_DB = XML_read_write.ConvertXmlStringtoObject<List<Info_DB>>(System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory+"Database_Config.xml"));
+                info_DB = XML_read_write.ConvertXmlStringtoObject<List<Info_DB>>(System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Database_Config.xml"));
 
-            info_JobMySQL = XML_read_write.ConvertXmlStringtoObject<List<Info_MySQLJob>>(System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory+"MySQLDatabase_Config.xml"));
+                info_JobMySQL = XML_read_write.ConvertXmlStringtoObject<List<Info_MySQLJob>>(System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "MySQLDatabase_Config.xml"));
 
 
-            fTPServer.URL = ConfigurationManager.AppSettings["FTP_SERVER_URI"].ToString();
-            fTPServer.User = ConfigurationManager.AppSettings["FTP_USER"].ToString();
-            fTPServer.Pass = ConfigurationManager.AppSettings["FTP_PASSWORD"].ToString();
+                fTPServer.URL = ConfigurationManager.AppSettings["FTP_SERVER_URI"].ToString();
+                fTPServer.User = ConfigurationManager.AppSettings["FTP_USER"].ToString();
+                fTPServer.Pass = ConfigurationManager.AppSettings["FTP_PASSWORD"].ToString();
 
-            _Server.ServerName = ConfigurationManager.AppSettings["Server_Name"].ToString();
-            _Server.User = ConfigurationManager.AppSettings["User"].ToString();
-            _Server.Pass = ConfigurationManager.AppSettings["Pass"].ToString();
+                _Server.Server_Name = ConfigurationManager.AppSettings["Server_Name"].ToString();
+                _Server.User = ConfigurationManager.AppSettings["User"].ToString();
+                _Server.Pass = ConfigurationManager.AppSettings["Pass"].ToString();
+
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Load Config...Done!", true);
+
+                timer.Start();
+
+            }
+            catch
+            {
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Load Config...failed!", true);
+            }
 
             //Running(list_job[0]);
 
@@ -125,38 +139,107 @@ namespace WS_CloneDataLive
             //    Restore(info_JobMySQL[i].DBSource);
             //}
 
-            timer.Start();
         }
 
 
-        void SQLServer_Running(Info_DB Job, Info_Server info_Server)
+        bool SQLServer_Running(Info_DB DB, Info_Server instansce)
         {
+            string Mess = "";
+            Exception er = null;    //gán cờ er bằng null chỉ thị ko có lỗi
+
             Thread.CurrentThread.IsBackground = true;
 
+            er = DB.Download_BackupFile(fTPServer);
+            if (er != null)
+            {
+                Mess = er.Message + ": " + ((er.InnerException == null) ? "" : er.InnerException.Message);
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Error - " + DB.DBTarget + ": " + Mess, true);
 
-            Job.Excute_Restore_DB(info_Server, fTPServer);
+                SendEmail.Send_Email(DB.Email, null, "[AMS - TMS] Clone Database error!", "Server: " + instansce.Server_Name + @"\nDatabase name: " + DB.DBTarget + "\n" + Mess, false);
 
+                return false;
+            }
+            else
+            {
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Download Backup file " + fTPServer.URL + "BackupDB_zip/" + DB.ServerSource + "/" + DateTime.Now.ToString("yyyy-MM-dd") + "/" + DB.DBSource + ".zip....done!", true);
+            }
+
+
+            er = DB.Excute_Restore_DB(instansce);
+            if (er != null)
+            {
+                Mess = er.Message + ": " + ((er.InnerException == null) ? "" : er.InnerException.Message);
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Error - " + DB.DBTarget + ": " + Mess, true);
+                SendEmail.Send_Email(DB.Email, null, "[AMS - TMS] Clone Database error!", "Server: " + instansce.Server_Name + @"\nDatabase name: " + DB.DBTarget + "\n" + Mess, false);
+
+                return false;
+            }
+            else
+            {
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Restore " + DB.ServerSource + @"\" + DB.DBSource + " to " + instansce.Server_Name + @"\" + DB.DBTarget + " done!", true);
+            }
+
+            SendEmail.Send_Email(DB.Email, null, "[AMS - TMS] Clone Database succufully!", "Clone Database " + DB.ServerSource + @"\" + DB.DBSource + " to " + instansce.Server_Name + @"\" + DB.DBTarget + " succufully!", false);
+
+            return true;
         }
 
-        void MySQL_Running(Info_MySQL_Instansce instansce, Info_MySQL_DB DB)
+        bool MySQL_Running(Info_MySQL_Instansce instansce, Info_MySQL_DB DB)
         {
+
+            string Mess = "";
+            Exception er = null;    //gán cờ er bằng null chỉ thị ko có lỗi
+
             Thread.CurrentThread.IsBackground = true;
 
-            DB.Excute_Restore_DB(instansce, fTPServer);
+            er = DB.Download_BackupFile(fTPServer);
+            if (er != null)
+            {
+                Mess = er.Message + ": " + ((er.InnerException == null) ? "" : er.InnerException.Message);
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Error - " + DB.DBTarget + ": " + Mess, true);
+
+                SendEmail.Send_Email(DB.Email, null, "[Dashboard - RTS] Clone Database error!", "Server: " + instansce.Server_Name + @"\nDatabase name: " + DB.DBTarget + "\n" + Mess, false);
+
+                return false;
+            }
+            else
+            {
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Download Backup file " + fTPServer.URL + "BackupDB_zip/" + DB.ServerSource + "/" + DateTime.Now.ToString("yyyy-MM-dd") + "/" + DB.DBSource + ".zip....done!", true);
+            }
+
+
+            er = DB.Excute_Restore_DB(instansce);
+            if (er != null)
+            {
+                Mess = er.Message + ": " + ((er.InnerException == null) ? "" : er.InnerException.Message);
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Error - " + DB.DBTarget + ": " + Mess, true);
+
+                SendEmail.Send_Email(DB.Email, null, "[Dashboard - RTS] Clone Database error!", "Server: " + instansce.Server_Name + @"\nDatabase name: " + DB.DBTarget + "\n" + Mess, false);
+
+                return false;
+            }
+            else
+            {
+                File_Read_Write.Write_File(log_path, DateTime.Now + ": Restore " + DB.ServerSource + @"\" + DB.DBSource + " to " + instansce.Server_Name + @"\" + DB.DBTarget + " done!", true);
+            }
+
+            SendEmail.Send_Email(DB.Email, null, "[Dashboard - RTS] Clone Database succufully!", "Clone Database " + DB.ServerSource + @"\" + DB.DBSource + " to " + instansce.Server_Name + @"\" + DB.DBTarget + " succufully!", false);
+
+            return true;
         }
 
-        
-        
+
+
 
         protected override void OnStop()
         {
             timer.Stop();
 
-            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), "-----------------------------------------------------", true);
+            File_Read_Write.Write_File(log_path, "-----------------------------------------------------", true);
 
-            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.ToString() + ": Service stopped!", true);
+            File_Read_Write.Write_File(log_path, DateTime.Now.ToString() + ": Service stopped!", true);
 
-            File_Read_Write.Write_File(AppDomain.CurrentDomain.BaseDirectory + @"Log\" + DateTime.Now.ToString("yyyy-MM-dd"), "-----------------------------------------------------", true);
+            File_Read_Write.Write_File(log_path, "-----------------------------------------------------", true);
 
         }
     }

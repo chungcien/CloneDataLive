@@ -8,7 +8,7 @@ namespace WS_CloneDataLive
 {
     public class Info_Server
     {
-        public string ServerName { set; get; }
+        public string Server_Name { set; get; }
         public string User { set; get; }
         public string Pass { set; get; }
 

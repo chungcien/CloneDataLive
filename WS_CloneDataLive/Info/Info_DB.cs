@@ -17,12 +17,16 @@ public class Info_DB
 
     }
 
-    public Exception Excute_Restore_DB(Info_Server info_Server, Info_FTPServer fTPServer)
-    { 
+    public Exception Download_BackupFile(Info_FTPServer fTPServer)
+    {
         try
         {
-            FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + ServerSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBSource + ".zip");
+            bool isOK = FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + ServerSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBSource + ".zip");
 
+            if(isOK != true)
+            {
+                return new Exception("Download Backup file failed!", new Exception(""));
+            }
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + DBSource + ".bak"))
             {
                 File.Delete(AppDomain.CurrentDomain.BaseDirectory + DBSource + ".bak");
@@ -30,13 +34,25 @@ public class Info_DB
 
             ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Download\" + DBSource + ".zip", AppDomain.CurrentDomain.BaseDirectory);
 
+        }
+        catch (Exception op)
+        {
+            return new Exception(op.Message, op.InnerException);
+        }
+        return null;
 
+    }
+
+    public Exception Excute_Restore_DB(Info_Server info_Server)
+    { 
+        try
+        {
             Database_Operation.RestoreDatabase(info_Server, DBTarget, AppDomain.CurrentDomain.BaseDirectory + DBSource + ".bak");
 
         }
         catch (Exception op)
         {
-            return op;
+            return new Exception(op.Message, op.InnerException);
         }
         return null;
 

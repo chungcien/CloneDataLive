@@ -19,14 +19,18 @@ namespace WS_CloneDataLive
         public List<string> Email { set; get; }
 
 
-        public Exception Excute_Restore_DB(Info_MySQL_Instansce instansce, Info_FTPServer fTPServer)
+        public Exception Download_BackupFile(Info_FTPServer fTPServer)
         {
             try
             {
                 File_Read_Write.Create_Exits_Folder(AppDomain.CurrentDomain.BaseDirectory + @"Download\");
 
-                //FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + DBSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBSource + ".zip");
+                bool isDown = FTPClient.Download(fTPServer.URL + "BackupDB_zip/" + ServerSource + "/" + DateTime.Now.ToString("yyyy-MM-dd"), fTPServer.User, fTPServer.Pass, AppDomain.CurrentDomain.BaseDirectory + @"Download\", DBSource + ".zip");
 
+                if (isDown != true)
+                {
+                    return new Exception("Download Backup file failed!", new Exception(""));
+                }
 
                 if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + DBSource + ".sql"))
                 {
@@ -35,6 +39,21 @@ namespace WS_CloneDataLive
 
                 ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Download\" + DBSource + ".zip", AppDomain.CurrentDomain.BaseDirectory);
 
+            }
+            catch (Exception op)
+            {
+                return new Exception(op.Message, op.InnerException);
+            }
+            return null;
+        }
+
+
+
+        public Exception Excute_Restore_DB(Info_MySQL_Instansce instansce)
+        {
+            try
+            {
+                
                 string constring = "server=" + instansce.Server_Name + ";port=" + instansce.Port + ";user=" + instansce.User + ";pwd=" + instansce.Pass + ";";
                 string file = AppDomain.CurrentDomain.BaseDirectory + DBSource + ".sql";
                 using (MySqlConnection conn = new MySqlConnection(constring))
@@ -45,7 +64,7 @@ namespace WS_CloneDataLive
                         {
                             cmd.Connection = conn;
                             conn.Open();
-                            cmd.CommandText = "SET GLOBAL max_allowed_packet=1024*1024*1024; DROP DATABASE IF EXISTS " + DBTarget + "; Create database " + DBTarget;
+                            cmd.CommandText = "DROP DATABASE IF EXISTS " + DBTarget + "; Create database " + DBTarget;
                             cmd.ExecuteNonQuery();
                             conn.Close();
 
@@ -62,7 +81,7 @@ namespace WS_CloneDataLive
             }
             catch (Exception op)
             {
-                return op;
+                return new Exception(op.Message, op.InnerException);
             }
             return null;
 
