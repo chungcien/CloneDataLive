@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS_CloneDataLive", "WS_Clon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS_BackupMySQL", "WS_BackupMySQL\WS_BackupMySQL.csproj", "{8EE55FD6-B5A3-4F39-A55E-4A0C2D2CD479}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS_ScheduleExec", "WS_ScheduleExec\WS_ScheduleExec.csproj", "{A77CE6C4-D677-4AA7-BAF9-CD3F74945709}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8EE55FD6-B5A3-4F39-A55E-4A0C2D2CD479}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EE55FD6-B5A3-4F39-A55E-4A0C2D2CD479}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EE55FD6-B5A3-4F39-A55E-4A0C2D2CD479}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A77CE6C4-D677-4AA7-BAF9-CD3F74945709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77CE6C4-D677-4AA7-BAF9-CD3F74945709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A77CE6C4-D677-4AA7-BAF9-CD3F74945709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77CE6C4-D677-4AA7-BAF9-CD3F74945709}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

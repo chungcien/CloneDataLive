@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ArrayOfInfo_MySQL xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Info_MySQL>
+    <Instances>
+      <Server_Name>103.116.100.155</Server_Name>
+      <DB_Name>audition</DB_Name>
+      <Port>3306</Port>
+      <User>vn_admin</User>
+      <Pass>C@uditionM#&amp;</Pass>
+      <To_Email>
+        <string>kienlt@vtconline.com</string>
+        <string>trungkien.tk97@gmail.com</string>
+      </To_Email>
+    </Instances>
+    <ListJob>
+      <Info_MySQL_Jobs>
+        <Time_Running>29-04-2021 11:33</Time_Running>
+        <Files>
+          <string>E:\VTC\_aux\20210429\1.sql</string>
+          <string>E:\VTC\_aux\20210429\2.sql</string>
+        </Files>
+      </Info_MySQL_Jobs>
+    </ListJob>
+  </Info_MySQL>
+</ArrayOfInfo_MySQL>
